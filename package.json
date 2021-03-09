@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/FDAndradeBR/sispag-nodejs-mongodb#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.1",
+    "mogoose": "^0.0.1-security"
   }
 }

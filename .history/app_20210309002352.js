@@ -4,7 +4,6 @@ const handlebars = require('express-handlebars');
 const app = express();
 const PORT = 8080;
 const admin = require('./routes/admin');
-const login = require('./routes/login');
 
 
 
@@ -17,8 +16,11 @@ app.engine('handlebars', handlebars({ defaultLayout: "main" }));
 app.set('view engine', 'handlebars');
 
 //Rotas
-app.use('/', login);
-app.use('/admin', admin);
+
+
+
+
+
 
 
 

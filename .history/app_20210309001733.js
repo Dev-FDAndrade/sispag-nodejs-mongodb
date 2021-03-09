@@ -1,12 +1,8 @@
-//Carregando os Módulos
+//Módulos
 const express = require('express');
 const handlebars = require('express-handlebars');
 const app = express();
 const PORT = 8080;
-const admin = require('./routes/admin');
-const login = require('./routes/login');
-
-
 
 //Configurações
 app.use(express.urlencoded({ extended: true }));
@@ -16,9 +12,11 @@ app.use(express.json());
 app.engine('handlebars', handlebars({ defaultLayout: "main" }));
 app.set('view engine', 'handlebars');
 
-//Rotas
-app.use('/', login);
-app.use('/admin', admin);
+
+
+
+
+
 
 
 

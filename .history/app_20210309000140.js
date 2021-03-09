@@ -18,7 +18,7 @@ const PORT = 8080;
 
 
 app.listen(PORT, () => {
-    console.log('Servidor Iniciado!');
+    console.log('Servidor Iniciado');
 });
 
 

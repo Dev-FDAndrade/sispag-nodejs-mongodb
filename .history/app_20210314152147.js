@@ -1,8 +1,3 @@
-//******
-// SISPAP - By FDAndrade (dev@fdandrade.com.br) - 05/04/2021
-// Node.js + MongoDB
-//******
-
 //Carregando os Módulos
 const express = require('express');
 const session = require('express-session');

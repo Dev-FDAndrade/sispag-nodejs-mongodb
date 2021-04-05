@@ -1,8 +1,3 @@
-//******
-// SISPAP - By FDAndrade (dev@fdandrade.com.br) - 05/04/2021
-// Node.js + MongoDB
-//******
-
 //Carregando os Módulos
 const express = require('express');
 const session = require('express-session');
@@ -58,7 +53,7 @@ app.use('/', login);
 app.use('/admin', admin);
 
 app.listen(PORT, () => {
-    console.log('Servidor Iniciado em https://localhost:' + PORT);
+    console.log('Servidor Iniciado na porta: https://localhost:' + PORT);
 });
 
 

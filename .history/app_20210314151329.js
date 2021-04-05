@@ -1,12 +1,5 @@
-//******
-// SISPAP - By FDAndrade (dev@fdandrade.com.br) - 05/04/2021
-// Node.js + MongoDB
-//******
-
 //Carregando os Módulos
 const express = require('express');
-const session = require('express-session');
-const flash = require('connect-flash');
 const handlebars = require('express-handlebars');
 const app = express();
 const PORT = 8080;
@@ -38,27 +31,22 @@ mongoose.connect('mongodb://localhost/sispag', {
 //Arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Sessões
-app.use(session({
-    secret: 'secsession',
-    resave: true,
-    saveUninitialized: true
-}));
+
+app.use(flash())
 
 //Middleware
-app.use(flash());
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg");
     res.locals.error_msg = req.flash("error_msg");
     next();
-});
+})
 
 //Rotas
 app.use('/', login);
 app.use('/admin', admin);
 
 app.listen(PORT, () => {
-    console.log('Servidor Iniciado em https://localhost:' + PORT);
+    console.log('Servidor Iniciado!');
 });
 
 

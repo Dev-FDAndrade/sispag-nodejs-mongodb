@@ -27,10 +27,9 @@ router.post('/addCatPagamento', (req, res) => {
     }
     //Adiciona os Dados no BD
     new catPagamento(data).save().then(() => {
-        req.flash('success_msg', 'Categoria cadastrada com sucesso!');
-        res.redirect('/admin/catPagamentos');
+        console.log('Categoria cadastrada com sucesso!');
     }).catch((err) => {
-        req.flash('error_msg', 'Oops, não foi possivel cadastrar a categoria! => ' + err);
+        console.log('Oops, não foi possivel cadastrar a categoria! => ' + err);
     });
 });
 

@@ -11,9 +11,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-//Funções
-const removeEspacoDuplo = require('../funcoes/removeEspacoDuplo');
-
 //Models
 require('../models/CatPagamento');
 const modelCatPagamento = mongoose.model('categoriasPagamento');
@@ -24,7 +21,7 @@ router.get('/', (req, res) => {
 //Lista de Categorias
 router.get('/catPagamentos', (req, res) => {
     modelCatPagamento.find().lean().then((categoriasPagamento) => {
-        res.render('admin/catPagamentos', { data: categoriasPagamento });
+        res.render('admin/catPagamentos', { categoriasPagamentos: categoriasPagamento });
     }).catch((err) => {
         req.flash('error_msg', 'Oops, categoria não encontrada! => ' + err);
         res.render('admin/catPagamentos');
@@ -45,15 +42,14 @@ router.post('/addCatPagamento', (req, res) => {
     if (errors.length > 0) {
         res.render('admin/cadCatPagamento', { errors: errors })
     } else {
-        //Dados do Formulário
+        //Dados
         const data = {
-            nome: removeEspacoDuplo(req.body.nome)
+            nome: req.body.nome
         }
-        //Verifica se categoria já existe
-        modelCatPagamento.findOne({ nome: removeEspacoDuplo(req.body.nome) }, function (err, novaCategoria) {
-            if (err) console.log(err);
+        //Verifica se cataegoria já existe
+        modelCatPagamento.findOne({ nome: req.body.nome }, function (err, novaCategoria) {
             if (novaCategoria) {
-                req.flash("error_msg", "Oops, Categoria de pagamento " + novaCategoria.nome + " já existe!")
+                req.flash("error_msg", "Oops, Categoria de pagamento " + novaCategoria.nome + err + " já existe!")
                 res.redirect('/admin/catPagamentos')
             } else {
                 //Adiciona os Dados no BD
@@ -65,18 +61,9 @@ router.post('/addCatPagamento', (req, res) => {
                 });
             }
         });
+
+
     }
-});
-
-//Editar Categoria Pagamento
-router.get('/editCatPagamento/:id', (req, res) => {
-    modelCatPagamento.findOne({ _id: req.params.id }).lean().then((categoriasPagamento) => {
-        res.render('admin/editCatPagamento', { data: categoriasPagamento })
-    }).catch((err) => {
-        req.flash('error_msg', 'Oops, não foi possivel cadastrar a categoria! => ' + err);
-        res.redirect('/admin/catPagamentos');
-    });
-
 });
 
 //View Pagamentos

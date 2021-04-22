@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 //Lista de Categorias
 router.get('/catPagamentos', (req, res) => {
     modelCatPagamento.find().lean().then((categoriasPagamento) => {
-        res.render('admin/catPagamentos', { data: categoriasPagamento });
+        res.render('admin/catPagamentos', { categoriasPagamentos: categoriasPagamento });
     }).catch((err) => {
         req.flash('error_msg', 'Oops, categoria não encontrada! => ' + err);
         res.render('admin/catPagamentos');

@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 //Lista de Categorias
 router.get('/catPagamentos', (req, res) => {
     modelCatPagamento.find().lean().then((categoriasPagamento) => {
-        res.render('admin/catPagamentos', { data: categoriasPagamento });
+        res.render('admin/catPagamentos', { categoriasPagamentos: categoriasPagamento });
     }).catch((err) => {
         req.flash('error_msg', 'Oops, categoria não encontrada! => ' + err);
         res.render('admin/catPagamentos');
@@ -71,7 +71,7 @@ router.post('/addCatPagamento', (req, res) => {
 //Editar Categoria Pagamento
 router.get('/editCatPagamento/:id', (req, res) => {
     modelCatPagamento.findOne({ _id: req.params.id }).lean().then((categoriasPagamento) => {
-        res.render('admin/editCatPagamento', { data: categoriasPagamento })
+        res.render('admin/editCatPagamento', { categoriasPagamento: categoriasPagamento })
     }).catch((err) => {
         req.flash('error_msg', 'Oops, não foi possivel cadastrar a categoria! => ' + err);
         res.redirect('/admin/catPagamentos');

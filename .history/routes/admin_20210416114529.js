@@ -11,9 +11,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-//Funções
-const removeEspacoDuplo = require('../funcoes/removeEspacoDuplo');
-
 //Models
 require('../models/CatPagamento');
 const modelCatPagamento = mongoose.model('categoriasPagamento');
@@ -24,7 +21,7 @@ router.get('/', (req, res) => {
 //Lista de Categorias
 router.get('/catPagamentos', (req, res) => {
     modelCatPagamento.find().lean().then((categoriasPagamento) => {
-        res.render('admin/catPagamentos', { data: categoriasPagamento });
+        res.render('admin/catPagamentos', { categoriasPagamentos: categoriasPagamento });
     }).catch((err) => {
         req.flash('error_msg', 'Oops, categoria não encontrada! => ' + err);
         res.render('admin/catPagamentos');
@@ -40,43 +37,42 @@ router.get('/cadCatPagamento', (req, res) => {
 router.post('/addCatPagamento', (req, res) => {
     var errors = [];
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
-        errors.push({ error: "Campo nome obrigatório!" })
+        errors.push({ err: "Campo nome obrigatório!" })
     }
     if (errors.length > 0) {
         res.render('admin/cadCatPagamento', { errors: errors })
     } else {
-        //Dados do Formulário
-        const data = {
-            nome: removeEspacoDuplo(req.body.nome)
-        }
         //Verifica se categoria já existe
-        modelCatPagamento.findOne({ nome: removeEspacoDuplo(req.body.nome) }, function (err, novaCategoria) {
+        modelCatPagamento.findOne({ categoriasPagamento: req.body.nome }, function (err, novaCategoria) {
             if (err) console.log(err);
             if (novaCategoria) {
-                req.flash("error_msg", "Oops, Categoria de pagamento " + novaCategoria.nome + " já existe!")
+                req.flash("error_msg", "Erro: Categoria de pagamento " + novaCategoria.nome + " já existe. Verifique!")
                 res.redirect('/admin/catPagamentos')
             } else {
-                //Adiciona os Dados no BD
-                new modelCatPagamento(data).save().then(() => {
-                    req.flash('success_msg', 'Categoria cadastrada com sucesso!');
-                    res.redirect('/admin/catPagamentos');
-                }).catch((err) => {
-                    req.flash('error_msg', 'Oops, não foi possivel cadastrar a categoria! => ' + err);
+                //Dados
+                const data = {
+                    nome: req.body.nome
+                }
+                var novaCategoria = new modelCatPagamento({ categoriasPagamento: req.body.nome });
+                novaCategoria.save(function (err, novaCategoria) {
+                    if (err) console.log(err);
+                    req.flash("success_msg", "Categoria de Pagamento cadastrado com sucesso!")
+                    res.redirect('/admin/categoria-pagamentos')
                 });
+
             }
-        });
-    }
-});
 
-//Editar Categoria Pagamento
-router.get('/editCatPagamento/:id', (req, res) => {
-    modelCatPagamento.findOne({ _id: req.params.id }).lean().then((categoriasPagamento) => {
-        res.render('admin/editCatPagamento', { data: categoriasPagamento })
-    }).catch((err) => {
-        req.flash('error_msg', 'Oops, não foi possivel cadastrar a categoria! => ' + err);
-        res.redirect('/admin/catPagamentos');
-    });
 
+
+
+            //Adiciona os Dados no BD
+            new modelCatPagamento(data).save().then(() => {
+                req.flash('success_msg', 'Categoria cadastrada com sucesso!');
+                res.redirect('/admin/catPagamentos');
+            }).catch((err) => {
+                req.flash('error_msg', 'Oops, não foi possivel cadastrar a categoria! => ' + err);
+            });
+        }
 });
 
 //View Pagamentos

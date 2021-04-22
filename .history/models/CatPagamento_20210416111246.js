@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Modelo Tabela
-const catPagamentoSchema = new Schema({
+const catPagamento = new Schema({
     nome: {
         type: String,
         require: true
@@ -21,4 +21,4 @@ const catPagamentoSchema = new Schema({
     }
 });
 
-mongoose.model('categoriasPagamento', catPagamentoSchema, 'categoriasPagamento');
+mongoose.model('categoriasPagamento', catPagamento);

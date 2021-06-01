@@ -82,7 +82,7 @@ router.get('/editCatPagamento/:id', (req, res) => {
 router.post('/updateCatPagamento', (req, res) => {
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         req.flash('error_msg', 'Oops, nome da categortia é obrigatório!');
-        res.redirect('/admin/editCatPagamento/' + req.body.id);
+        res.redirect('/admin/editCatPagamento/6079a849ff5c42325c6b28a0');
     } else {
         modelCatPagamento.findOne({ _id: req.body.id }).then((catPagamento) => {
             catPagamento.nome = req.body.nome

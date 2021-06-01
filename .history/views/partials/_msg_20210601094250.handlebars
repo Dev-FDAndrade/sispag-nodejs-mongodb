@@ -1,12 +1,12 @@
 {{#if success_msg}}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{success_msg}}
+    <strong>{{success_msg}}</strong>
 </div>
 {{/if}}
 
 {{#if error_msg}}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{error_msg}}
+    <strong>{{error_msg}}</strong>
 </div>
 {{/if}}
 
@@ -14,6 +14,6 @@
 
 {{#each errors}}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{error}}
+    <strong>{{error}}</strong>
 </div>
 {{/each}}

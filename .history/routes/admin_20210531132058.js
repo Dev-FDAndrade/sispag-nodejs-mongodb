@@ -80,9 +80,14 @@ router.get('/editCatPagamento/:id', (req, res) => {
 
 //Update Categoria Pagamento
 router.post('/updateCatPagamento', (req, res) => {
+    var errors = [];
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
-        req.flash('error_msg', 'Oops, nome da categortia é obrigatório!');
-        res.redirect('/admin/editCatPagamento/' + req.body.id);
+        errors.push({ error: "Campo nome da categortia obrigatório!" })
+    }
+    if (errors.length > 0) {
+        //res.render('/admin/editCatPagamento/' + req.body.id, { errors: errors });
+        req.flash('error_msg', 'Oops, não foi possivel atualizar a categoria! => ' + { errors: errors });
+        res.redirect('/admin/editCatPagamento/6079a849ff5c42325c6b28a0');
     } else {
         modelCatPagamento.findOne({ _id: req.body.id }).then((catPagamento) => {
             catPagamento.nome = req.body.nome

@@ -70,34 +70,39 @@ router.post('/addCatPagamento', (req, res) => {
 
 //Editar Categoria Pagamento
 router.get('/editCatPagamento/:id', (req, res) => {
-    modelCatPagamento.findOne({ _id: req.params.id }).lean().then((infoCategoria) => {
-        res.render('admin/editCatPagamento', { data: infoCategoria })
-    }).catch((err) => {
-        req.flash('error_msg', 'Oops, categoria não encontrada! => ' + err);
-        res.redirect('/admin/catPagamentos');
-    });
+
+    var errors = [];
+    if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
+        errors.push({ error: "Campo nome obrigatório!" })
+    }
+    if (errors.length > 0) {
+        res.render('admin/cadCatPagamento', { errors: errors })
+    } else {
+
+        modelCatPagamento.findOne({ _id: req.params.id }).lean().then((infoCategoria) => {
+            res.render('admin/editCatPagamento', { data: infoCategoria })
+        }).catch((err) => {
+            req.flash('error_msg', 'Oops, categoria não encontrada! => ' + err);
+            res.redirect('/admin/catPagamentos');
+        });
+    }
 });
 
 //Update Categoria Pagamento
 router.post('/updateCatPagamento', (req, res) => {
-    if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
-        req.flash('error_msg', 'Oops, nome da categortia é obrigatório!');
-        res.redirect('/admin/editCatPagamento/' + req.body.id);
-    } else {
-        modelCatPagamento.findOne({ _id: req.body.id }).then((catPagamento) => {
-            catPagamento.nome = req.body.nome
-            catPagamento.save().then(() => {
-                req.flash('success_msg', 'Categoria atualizada com sucesso!');
-                res.redirect('/admin/catPagamentos');
-            }).catch((err) => {
-                req.flash('error_msg', 'Oops, não foi possivel atualizar a categoria! => ' + err);
-                res.redirect('/admin/catPagamentos');
-            });
+    modelCatPagamento.findOne({ _id: req.body.id }).then((catPagamento) => {
+        catPagamento.nome = req.body.nome
+        catPagamento.save().then(() => {
+            req.flash('success_msg', 'Categoria atualizada com sucesso!');
+            res.redirect('/admin/catPagamentos');
         }).catch((err) => {
-            req.flash('error_msg', 'Oops, não foi possivel atualizar, categoria não encontrada! => ' + err);
+            req.flash('error_msg', 'Oops, não foi possivel atualizar a categoria! => ' + err);
             res.redirect('/admin/catPagamentos');
         });
-    }
+    }).catch((err) => {
+        req.flash('error_msg', 'Oops, não foi possivel atualizar, categoria não encontrada! => ' + err);
+        res.redirect('/admin/catPagamentos');
+    })
 });
 
 //View Pagamentos

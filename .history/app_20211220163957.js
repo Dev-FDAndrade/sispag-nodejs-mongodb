@@ -7,7 +7,6 @@
  * * */
 
 //Carregando os Módulos
-import './setup/db';
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');

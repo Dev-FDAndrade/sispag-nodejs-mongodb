@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -- -r esm -r dotenv/config app.js",
-    "start": "pm2 start app.js --watch --no-daemon --node-args=\"-r esm\""
+    "start": "pm2 start index.js --watch --no-daemon --node-args=\"-r esm\""
   },
   "repository": {
     "type": "git",
@@ -29,8 +29,6 @@
     "mogoose": "^0.0.1-security",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.19",
-    "nodemon": "^2.0.15",
-    "pm2": "^5.1.0",
-    "esm": "^3.2.25"
+    "nodemon": "^2.0.15"
   }
 }

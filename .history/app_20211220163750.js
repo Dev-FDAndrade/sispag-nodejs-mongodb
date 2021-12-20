@@ -7,14 +7,13 @@
  * * */
 
 //Carregando os Módulos
-import './setup/db';
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const handlebars = require('express-handlebars');
 const app = express();
 const PORT = 3000;
-//const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const path = require('path');
 const admin = require('./routes/admin');
 const login = require('./routes/login');

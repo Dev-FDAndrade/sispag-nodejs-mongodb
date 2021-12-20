@@ -10,9 +10,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Modelo Tabela
-const catPagamentoSchema = new Schema({
+const PagamentoSchema = new Schema({
     nome: {
         type: String,
+        require: true
+    },
+    valor: {
+        type: Number,
+        require: true
+    },
+    categoria: {
+        type: Schema.Types.ObjectId,
+        ref: 'categoriasPagamento',
         require: true
     },
     created: {
@@ -21,4 +30,7 @@ const catPagamentoSchema = new Schema({
     }
 });
 
-mongoose.model('categoriasPagamento', catPagamentoSchema, 'categoriasPagamento');
+mongoose.model('pagamento', PagamentoSchema);
+
+
+

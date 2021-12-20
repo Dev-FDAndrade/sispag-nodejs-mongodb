@@ -1,0 +1,55 @@
+<div class="content p-1">
+    <div class="list-group-item">
+        <div class="d-flex">
+            <div class="mr-auto p-2">
+                <h2 class="display-4 titulo">Editar Pagamento</h2>
+            </div>
+            <div class="p-2">
+                <a href="/admin/pagamentos" class="btn btn-warning">Listar Pagamentos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group-item">
+        {{> _msg}}
+        <form action="/admin/updatePagamento" method="POST">
+            <input type="hidden" name="id" value="{{data._id}}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nome"><span class="text-danger">*</span> Nome do Pagamento</label>
+                    <input type="text" name="nome" id="nome" class="form-control" value="{{data.nome}}"
+                        placeholder="Nome do Pagamento">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="valor"><span class="text-danger">*</span> Valor</label>
+                    <input type="text" name="valor" id="valor" class="form-control" value="{{data.valor}}"
+                        placeholder="Valor do Pagamento">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="categoria">Categoria-{{data.categoria._id}}</label>
+                    <select name="categoria" id="categoria" class="form-control">
+                        {{#select data.categoria._id}}
+                        {{#each categorias}}
+                        <option value="{{_id}}">{{nome}}</option>
+                        {{else}}
+                        <option value="">Nenhuma Categoria encontrada!</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script>
+
+
+</script>

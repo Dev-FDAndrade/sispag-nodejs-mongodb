@@ -23,14 +23,15 @@
   "homepage": "https://github.com/FDAndradeBR/sispag-nodejs-mongodb#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-handlebars": "^5.2.1",
     "express-session": "^1.17.1",
+    "handlebars": "^4.5.3",
     "mogoose": "^0.0.1-security",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.19",
     "nodemon": "^2.0.15",
-    "pm2": "^5.1.0",
-    "esm": "^3.2.25"
+    "pm2": "^5.1.0"
   }
 }

@@ -12,6 +12,7 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const handlebars = require('express-handlebars');
+const {select} = require('./helpers/handlebar_helper');
 const app = express();
 const PORT = 3000;
 //const mongoose = require('mongoose');
@@ -25,7 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Handlebars
-app.engine('handlebars', handlebars({ defaultLayout: "main" }));
+//app.engine('handlebars', handlebars({ defaultLayout: "main" }));
+//app.set('view engine', 'handlebars');
+
+var hbs = handlebars.create({helpers: require('./helpers/handlebar_helper'), defaultLayout: 'main'});
+//app.engine('handlebars', handlebars({defaultLayout: "main", helpers: {select: select}}));
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 //Arquivos estáticos

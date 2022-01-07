@@ -188,8 +188,7 @@ router.post('/addPagamento', (req, res) => {
 //Visualizar Pagamento
 router.get('/viewPagamento/:id', (req, res) => {
     modelPagamento.findOne({ _id: req.params.id }).populate("categoria").lean().then((infoPagamento) => {
-        res.render('admin/viewPagamento', { data: infoPagamento });
-        console.log(infoPagamento);
+        res.render('admin/viewPagamento', { data:infoPagamento});
     }).catch((error) => {
         req.flash('error_msg', 'Oops, pagamento não encontrado! => ' + error);
         res.render('admin/pagamentos');

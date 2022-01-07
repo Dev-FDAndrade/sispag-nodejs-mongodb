@@ -28,12 +28,12 @@
         <dl class="row">
             <dt class="col-sm-3">ID:</dt>
             <dd class="col-sm-9">{{data._id}}</dd>
-
             <dt class="col-sm-3">Nome do Pagamento:</dt>
             <dd class="col-sm-9">{{data.nome}}</dd>
             <dt class="col-sm-3">Categoria do Pagamento:</dt>
-            <dd class="col-sm-9">{{catpagamentos.nome}}</dd>
-
+            <dd class="col-sm-9">{{data.categoria.nome}}</dd>
+            <dt class="col-sm-3">Valor:</dt>
+            <dd class="col-sm-9">{{data.valor}}</dd>
             <dt class="col-sm-3">Data do Pagamento:</dt>
             <dd class="col-sm-9">{{data.created}}</dd>
         </dl>

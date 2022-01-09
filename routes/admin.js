@@ -472,7 +472,6 @@ router.post('/updateUsuario', (req, res) => {
     }
 });
 
-
 //Exportar o Módulo de Rotas
 module.exports = router;
 

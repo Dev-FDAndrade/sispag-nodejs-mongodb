@@ -15,22 +15,16 @@ const handlebars = require('express-handlebars');
 const {select} = require('./helpers/handlebar_helper');
 const app = express();
 const PORT = 3000;
-//const mongoose = require('mongoose');
 const path = require('path');
 const admin = require('./routes/admin');
 const login = require('./routes/login');
-
 
 //Configurações
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Handlebars
-//app.engine('handlebars', handlebars({ defaultLayout: "main" }));
-//app.set('view engine', 'handlebars');
-
 var hbs = handlebars.create({helpers: require('./helpers/handlebar_helper'), defaultLayout: 'main'});
-//app.engine('handlebars', handlebars({defaultLayout: "main", helpers: {select: select}}));
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
@@ -60,28 +54,3 @@ app.use('/admin', admin);
 app.listen(PORT, () => {
     console.log('Servidor Iniciado em https://localhost:' + PORT);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

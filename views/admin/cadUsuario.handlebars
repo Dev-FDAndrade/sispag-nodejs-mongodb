@@ -1,0 +1,76 @@
+<div class="content p-1">
+    <div class="list-group-item">
+        <div class="d-flex">
+            <div class="mr-auto p-2">
+                <h2 class="display-4 titulo">Cadastrar Usuário</h2>
+            </div>
+            <div class="p-2">
+                <a href="/admin/usuarios" class="btn btn-warning">Listar Usuários</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group-item">
+        {{> _msg}}
+        <form action="/admin/addUsuario" method="POST">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nome"><span class="text-danger">*</span> Nome Completo</label>
+                    <input type="text" name="nome" id="nome" class="form-control" placeholder="Informe o nome" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="valor"><span class="text-danger">*</span> Email</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Informe o email"
+                        required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="valor"><span class="text-danger">*</span> CPF</label>
+                    <input type="text" name="cpf" id="cpf" class="form-control" placeholder="Informe o CPF" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="valor"><span class="text-danger">*</span> Senha</label>
+                    <input type="password" name="senha" id="senha" class="form-control" placeholder="Informe a senha"
+                        required>
+                </div>
+            </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="valor"><span class="text-danger">*</span> Confirmar a Senha</label>
+                    <input type="password" name="csenha" id="csenha" class="form-control" placeholder="Confirme a senha"
+                        required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="grupo"><span class="text-danger">*</span> Grupo</label>
+                    <select name="grupo" id="grupo" class="form-control" required>
+                        {{#each data}}
+                        <option value="{{_id}}">{{nome}}</option>
+                        {{else}}
+                        <option value="">Nenhum Grupo encontrado!</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="status"><span class="text-danger">*</span> Status</label>
+                    <select name="status" id="status" class="form-control" required>
+                        <option value="1">Ativo</option>
+                        <option value="0">Inativo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-success">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.6"
 services:
   db:
     image: mongo:4.2
@@ -25,6 +25,9 @@ services:
       - db
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
+      - ${PORT_DEBUG_NODE}:${PORT_DEBUG_NODE}
+    expose:
+      - ${PORT_DEBUG_NODE}
  #   networks:
  #     - my_network
     volumes:

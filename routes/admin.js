@@ -13,6 +13,7 @@ const router = express.Router();
 
 //Criptografia
 import bcryptjs from 'bcryptjs';
+import { truncate } from 'fs';
 
 //Funções
 const removeEspacoDuplo = require('../funcoes/removeEspacoDuplo');
@@ -27,10 +28,23 @@ require('../models/Usuario');
 const modelUsuario = mongoose.model('usuario');
 require('../models/Grupo');
 const modelGrupo = mongoose.model('grupo');
+const passport = require('passport');
 
 router.get('/', (req, res) => {
-    res.render('admin/index'); 
-}); 
+    res.render('admin/index');
+});
+
+router.get('/login', (req, res) => {
+    res.render('admin/login');
+});
+
+router.post('/login', (req, res, next)=>{
+    passport.authenticate("local",{
+        successRedirect:"/admin/",
+        failureRedirect:"/admin/login",
+        failureFlash:true
+    })(req, res, next);
+});
 
 //Lista de Categorias
 router.get('/catPagamentos', (req, res) => {
@@ -444,8 +458,8 @@ router.post('/updateUsuario', (req, res) => {
         errors.push({ error: 'Oops, informe o CPF!' });
     }
     if (errors.length > 0) {
-            req.flash('errors_msg', errors);
-            res.redirect('editUsuario/'+req.body.id);
+        req.flash('errors_msg', errors);
+        res.redirect('editUsuario/' + req.body.id);
     } else {
         modelUsuario.findOne({ _id: req.body.id }).then((Usuario) => {
             Usuario.nome = req.body.nome;
@@ -474,4 +488,3 @@ router.post('/updateUsuario', (req, res) => {
 
 //Exportar o Módulo de Rotas
 module.exports = router;
-

@@ -31,7 +31,7 @@
                                     class="btn btn-outline-primary btn-sm">Visualizar</a>
                                 <a href="/admin/editPagamento/{{_id}}" class="btn btn-outline-warning btn-sm">Editar</a>
                                 <a href="/admin/deletePagamento/{{_id}}"
-                                    class="btn btn-outline-danger btn-sm">Apagar</a>
+                                    class="btn btn-outline-danger btn-sm" data-confirm="{{nome}}">Apagar</a>
                             </span>
                             <div class="dropdown d-block d-md-none">
                                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="acoesListar"
@@ -41,7 +41,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
                                     <a class="dropdown-item" href="/admin/viewPagamento/{{_id}}">Visualizar</a>
                                     <a class="dropdown-item" href="/admin/editPagamento/{{_id}}">Editar</a>
-                                    <a class="dropdown-item" href="/admin/deletePagamento/{{_id}}">Apagar</a>
+                                    <a class="dropdown-item" href="/admin/deletePagamento/{{_id}}" data-confirm="{{nome}}">Apagar</a>
                                 </div>
                             </div>
                         </td>

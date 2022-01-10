@@ -8,6 +8,7 @@
 
 //Carregando os Módulos
 import './setup/db';
+
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -18,6 +19,9 @@ const PORT = 3000;
 const path = require('path');
 const admin = require('./routes/admin');
 const login = require('./routes/login');
+const passport = require('passport')
+require("./config/auth")(passport)
+
 
 //Configurações
 app.use(express.urlencoded({ extended: true }));
@@ -37,6 +41,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //Middleware
 app.use(flash());
@@ -44,6 +51,8 @@ app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg");
     res.locals.error_msg = req.flash("error_msg");
     res.locals.errors_msg = req.flash("errors_msg");
+    res.locals.error = req.flash("error");
+    res.locals.user = req.user || null;
     next();
 });
 

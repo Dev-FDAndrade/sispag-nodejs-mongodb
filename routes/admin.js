@@ -39,6 +39,12 @@ router.get('/login', (req, res) => {
     res.render('admin/login');
 });
 
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success_msg','Deslogado com sucesso!');
+    res.redirect('/admin/login');
+});
+
 router.post('/login', (req, res, next) => {
     passport.authenticate("local", {
         successRedirect: "/admin/",

@@ -29,8 +29,9 @@ const modelUsuario = mongoose.model('usuario');
 require('../models/Grupo');
 const modelGrupo = mongoose.model('grupo');
 const passport = require('passport');
+const { isLogged } = require('../helpers/isLogged_helper');
 
-router.get('/', (req, res) => {
+router.get('/', isLogged, (req, res) => {
     res.render('admin/index');
 });
 
@@ -38,16 +39,16 @@ router.get('/login', (req, res) => {
     res.render('admin/login');
 });
 
-router.post('/login', (req, res, next)=>{
-    passport.authenticate("local",{
-        successRedirect:"/admin/",
-        failureRedirect:"/admin/login",
-        failureFlash:true
+router.post('/login', (req, res, next) => {
+    passport.authenticate("local", {
+        successRedirect: "/admin/",
+        failureRedirect: "/admin/login",
+        failureFlash: true
     })(req, res, next);
 });
 
 //Lista de Categorias
-router.get('/catPagamentos', (req, res) => {
+router.get('/catPagamentos', isLogged, (req, res) => {
     modelCatPagamento.find().lean().then((listCategoriasPagamento) => {
         res.render('admin/catPagamentos', { data: listCategoriasPagamento });
     }).catch((error) => {
@@ -57,7 +58,7 @@ router.get('/catPagamentos', (req, res) => {
 });
 
 //Visualizar Categoria
-router.get('/viewCatPagamento/:id', (req, res) => {
+router.get('/viewCatPagamento/:id', isLogged, (req, res) => {
     modelCatPagamento.findOne({ _id: req.params.id }).lean().then((infoCatPagamento) => {
         res.render('admin/viewCatPagamento', { data: infoCatPagamento });
     }).catch((error) => {
@@ -67,12 +68,12 @@ router.get('/viewCatPagamento/:id', (req, res) => {
 });
 
 //View Cadastrar Categoria
-router.get('/cadCatPagamento', (req, res) => {
+router.get('/cadCatPagamento', isLogged, (req, res) => {
     res.render('admin/cadCatPagamento');
 });
 
 //Adicionar Categoria Pagamento
-router.post('/addCatPagamento', (req, res) => {
+router.post('/addCatPagamento', isLogged, (req, res) => {
     var errors = [];
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         errors.push({ error: "Campo nome obrigatório!" })
@@ -106,7 +107,7 @@ router.post('/addCatPagamento', (req, res) => {
 });
 
 //Editar Categoria Pagamento
-router.get('/editCatPagamento/:id', (req, res) => {
+router.get('/editCatPagamento/:id', isLogged, (req, res) => {
     modelCatPagamento.findOne({ _id: req.params.id }).lean().then((infoCategoria) => {
         res.render('admin/editCatPagamento', { data: infoCategoria })
     }).catch((error) => {
@@ -116,7 +117,7 @@ router.get('/editCatPagamento/:id', (req, res) => {
 });
 
 //Update Categoria Pagamento
-router.post('/updateCatPagamento', (req, res) => {
+router.post('/updateCatPagamento', isLogged, (req, res) => {
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         req.flash('error_msg', 'Oops, nome da categortia é obrigatório!');
         res.redirect('/admin/editCatPagamento/' + req.body.id);
@@ -138,7 +139,7 @@ router.post('/updateCatPagamento', (req, res) => {
 });
 
 //Excluir Categoria Pagamento
-router.get('/deleteCatPagamento/:id', (req, res) => {
+router.get('/deleteCatPagamento/:id', isLogged, (req, res) => {
     modelCatPagamento.deleteOne({ _id: req.params.id }).then(() => {
         req.flash('success_msg', 'Categoria excluida com sucesso!');
         res.redirect('/admin/catPagamentos');
@@ -149,7 +150,7 @@ router.get('/deleteCatPagamento/:id', (req, res) => {
 });
 
 //View Pagamentos
-router.get('/pagamentos', (req, res) => {
+router.get('/pagamentos', isLogged, (req, res) => {
     modelPagamento.find().populate("categoria").lean().then((pagamentos) => {
         res.render("admin/pagamentos", { data: pagamentos });
     }).catch((error) => {
@@ -160,7 +161,7 @@ router.get('/pagamentos', (req, res) => {
 });
 
 //View Cadastro Pagamento
-router.get('/cadPagamento', (req, res) => {
+router.get('/cadPagamento', isLogged, (req, res) => {
     modelCatPagamento.find().lean().then((categoriasPagamento) => {
         res.render("admin/cadPagamento", { categorias: categoriasPagamento });
 
@@ -172,7 +173,7 @@ router.get('/cadPagamento', (req, res) => {
 });
 
 //Adicionar Pagamento no BD
-router.post('/addPagamento', (req, res) => {
+router.post('/addPagamento', isLogged, (req, res) => {
     var errors = [];
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         errors.push({ error: "Necessário preencher o campo nome" });
@@ -206,7 +207,7 @@ router.post('/addPagamento', (req, res) => {
 
 
 //Visualizar Pagamento
-router.get('/viewPagamento/:id', (req, res) => {
+router.get('/viewPagamento/:id', isLogged, (req, res) => {
     modelPagamento.findOne({ _id: req.params.id }).populate("categoria").lean().then((infoPagamento) => {
         res.render('admin/viewPagamento', { data: infoPagamento });
     }).catch((error) => {
@@ -217,7 +218,7 @@ router.get('/viewPagamento/:id', (req, res) => {
 
 
 //Editar Pagamento
-router.get('/editPagamento/:id', (req, res) => {
+router.get('/editPagamento/:id', isLogged, (req, res) => {
     modelPagamento.findOne({ _id: req.params.id }).populate("categoria").lean().then((infoPagamento) => {
         modelCatPagamento.find().lean().then((catpagamentos) => {
             res.render('admin/editPagamento', { data: infoPagamento, categorias: catpagamentos });
@@ -234,7 +235,7 @@ router.get('/editPagamento/:id', (req, res) => {
 });
 
 //Update Categoria Pagamento
-router.post('/updateCatPagamento', (req, res) => {
+router.post('/updateCatPagamento', isLogged, (req, res) => {
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         req.flash('error_msg', 'Oops, nome da categortia é obrigatório!');
         res.redirect('/admin/editCatPagamento/' + req.body.id);
@@ -256,7 +257,7 @@ router.post('/updateCatPagamento', (req, res) => {
 });
 
 //Excluir Pagamento
-router.get('/deletePagamento/:id', (req, res) => {
+router.get('/deletePagamento/:id', isLogged, (req, res) => {
     modelPagamento.deleteOne({ _id: req.params.id }).then(() => {
         req.flash('success_msg', 'Pagamento excluido com sucesso!');
         res.redirect('/admin/pagamentos');
@@ -267,7 +268,7 @@ router.get('/deletePagamento/:id', (req, res) => {
 });
 
 //Update Pagamento
-router.post('/updatePagamento', (req, res) => {
+router.post('/updatePagamento', isLogged, (req, res) => {
     var error = false;
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         req.flash('error_msg', 'Oops, informe  o nome do pagamento!');
@@ -304,7 +305,7 @@ router.post('/updatePagamento', (req, res) => {
 });
 
 //Lista Usuários
-router.get('/usuarios', (req, res) => {
+router.get('/usuarios', isLogged, (req, res) => {
     const { page = 1 } = req.query;
     var options = {
         sort: { date: -1 },
@@ -323,7 +324,7 @@ router.get('/usuarios', (req, res) => {
 
 
 //View Cadastrar Usuário
-router.get('/cadUsuario', (req, res) => {
+router.get('/cadUsuario', isLogged, (req, res) => {
     modelGrupo.find().lean().then((grupos) => {
         res.render("admin/cadUsuario", { data: grupos });
     }).catch((error) => {
@@ -334,7 +335,7 @@ router.get('/cadUsuario', (req, res) => {
 });
 
 //Adicionar Usuário
-router.post('/addUsuario', (req, res) => {
+router.post('/addUsuario', isLogged, (req, res) => {
     var errors = [];
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
         errors.push({ error: "Campo Nome é obrigatório!" })
@@ -420,7 +421,7 @@ router.post('/addUsuario', (req, res) => {
 
 
 //Visualizar Usuário
-router.get('/viewUsuario/:id', (req, res) => {
+router.get('/viewUsuario/:id', isLogged, (req, res) => {
     modelUsuario.findOne({ _id: req.params.id }).populate("grupo").lean().then((infoUsuario) => {
         res.render('admin/viewUsuario', { data: infoUsuario });
     }).catch((error) => {
@@ -430,7 +431,7 @@ router.get('/viewUsuario/:id', (req, res) => {
 });
 
 //Editar Usuário
-router.get('/editUsuario/:id', (req, res) => {
+router.get('/editUsuario/:id', isLogged, (req, res) => {
     modelUsuario.findOne({ _id: req.params.id }).populate("grupo").lean().then((infoUsuario) => {
         modelGrupo.find().lean().then((grupos) => {
             res.render('admin/editUsuario', { data: infoUsuario, grupos: grupos });
@@ -445,7 +446,7 @@ router.get('/editUsuario/:id', (req, res) => {
 });
 
 //Update Usuário
-router.post('/updateUsuario', (req, res) => {
+router.post('/updateUsuario', isLogged, (req, res) => {
     var data_user = req.body;
     var errors = [];
     if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {

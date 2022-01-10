@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 //Criptografia
-import bcryptjs from 'bcryptjs';
+const bcryptjs = require('bcryptjs');
 import { truncate } from 'fs';
 
 //Funções
@@ -41,7 +41,7 @@ router.get('/login', (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    req.flash('success_msg','Deslogado com sucesso!');
+    req.flash('success_msg', 'Deslogado com sucesso!');
     res.redirect('/admin/login');
 });
 
@@ -388,39 +388,37 @@ router.post('/addUsuario', isLogged, (req, res) => {
         //Dados do Formulário
         const data = {
             nome: removeEspacoDuplo(req.body.nome),
-            email: req.body.email,
-            cpf: req.body.cpf,
-            senha: req.body.senha,
+            email: req.body.email.trim(),
+            cpf: req.body.cpf.trim(),
             grupo: req.body.grupo,
             status: req.body.status
         }
 
         bcryptjs.genSalt(10, (error, salt) => {
-            bcryptjs.hash(data.senha, salt, (error, hash) => {
+            bcryptjs.hash(req.body.senha.trim(), salt, (error, hash) => {
                 if (error) {
                     req.flash("error_msg", "Oops, não foi possivel cadastrar!");
                     res.redirect('/admin/cadUsuario');
                 } else {
                     data.senha = hash;
+                    //Verifica se usuario já existe
+                    modelUsuario.findOne({ cpf: req.body.cpf }, function (error, usuarioExiste) {
+                        if (error) console.log(error);
+                        if (usuarioExiste) {
+                            req.flash("error_msg", "Oops, Já existe o usuário " + usuarioExiste.nome + " cadastrado com o CPF:" + usuarioExiste.cpf)
+                            res.redirect('/admin/usuarios')
+                        } else {
+                            //Adiciona os Dados no BD
+                            new modelUsuario(data).save().then(() => {
+                                req.flash('success_msg', 'Usuario cadastrado com sucesso!');
+                                res.redirect('/admin/usuarios');
+                            }).catch((error) => {
+                                req.flash('error_msg', 'Oops, não foi possivel cadastrar o usuário! => ' + error);
+                            });
+                        }
+                    });
                 }
             });
-        });
-
-        //Verifica se usuario já existe
-        modelUsuario.findOne({ cpf: req.body.cpf }, function (error, usuarioExiste) {
-            if (error) console.log(error);
-            if (usuarioExiste) {
-                req.flash("error_msg", "Oops, Já existe o usuário " + usuarioExiste.nome + " cadastrado com o CPF:" + usuarioExiste.cpf)
-                res.redirect('/admin/usuarios')
-            } else {
-                //Adiciona os Dados no BD
-                new modelUsuario(data).save().then(() => {
-                    req.flash('success_msg', 'Usuario cadastrado com sucesso!');
-                    res.redirect('/admin/usuarios');
-                }).catch((error) => {
-                    req.flash('error_msg', 'Oops, não foi possivel cadastrar o usuário! => ' + error);
-                });
-            }
         });
     }
 });

@@ -6,7 +6,7 @@ const modelUsuario = mongoose.model('usuario');
 
 module.exports = function (passport) {
     passport.use(new localStrategy({ usernameField: 'cpf', passwordField: 'senha' }, (cpf, senha, done) => {
-        modelUsuario.findOne({ cpf: cpf }).then((usuario) => {
+        modelUsuario.findOne({ cpf: cpf.trim() }).then((usuario) => {
 
             if (!usuario) {
                 return done(null, false, { message: "Cadastro não encontrado!" });

@@ -1,0 +1,47 @@
+<div class="content p-1">
+    <div class="list-group-item">
+        <div class="d-flex">
+            <div class="mr-auto p-2">
+                <h2 class="display-4 titulo">Editar Perfil</h2>
+            </div>
+            <div class="p-2">
+                <a href="/admin/perfil" class="btn btn-outline-info btn-sm">Voltar</a>
+            </div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        {{> _msg}}
+        <form action="/admin/updatePerfil" method="POST">
+            <input type="hidden" name="id" value="{{data._id}}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nome"><span class="text-danger">*</span> Nome Completo</label>
+                    <input type="text" name="nome" id="nome" class="form-control" value="{{data.nome}}" >
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="email"><span class="text-danger">*</span> Email</label>
+                    <input type="email" name="email" id="email" class="form-control" value="{{data.email}}">
+                </div>
+            </div>
+
+                 <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="senha"> Senha</label>
+                    <input type="password" name="senha" id="senha" class="form-control" placeholder="Informe a senha">
+                </div>
+            </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="csenha"> Confirmar a Senha</label>
+                    <input type="password" name="csenha" id="csenha" class="form-control" placeholder="Confirme a senha">
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+        </form>
+    </div>
+
+</div>

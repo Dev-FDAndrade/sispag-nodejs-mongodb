@@ -374,13 +374,12 @@ router.post('/addUsuario', isLogged, (req, res) => {
     }
 
     if (req.body.senha != req.body.csenha) {
-        errors.push({ error: "O Campo Senha e Confirmação Senha não são diferentes!" })
+        errors.push({ error: "O Campo Senha e Confirmação Senha são diferentes!" })
     }
 
     if (!req.body.grupo || typeof req.body.grupo == undefined || req.body.grupo == null) {
         errors.push({ error: "Campo Grupo obrigatório!" })
     }
-
 
     if (errors.length > 0) {
         res.render('admin/cadUsuario', { errors: errors })
@@ -430,7 +429,7 @@ router.get('/viewUsuario/:id', isLogged, (req, res) => {
         res.render('admin/viewUsuario', { data: infoUsuario });
     }).catch((error) => {
         req.flash('error_msg', 'Oops, usuário não encontrado! => ' + error);
-        res.render('admin/usuarios');
+        res.redirect('admin/');
     });
 });
 
@@ -490,6 +489,106 @@ router.post('/updateUsuario', isLogged, (req, res) => {
         });
     }
 });
+
+//Visualizar Perfil Usuário
+router.get('/perfil', isLogged, (req, res) => {
+    modelUsuario.findOne({ _id: req.user._id }).lean().then((usuario) => {
+        modelGrupo.find().lean().then((grupos) => {
+            res.render('admin/viewPerfil', { data: usuario, grupos: grupos });
+        }).catch((error) => {
+            req.flash('error_msg', 'Oops, não foi possivel carregar as informações! => ' + error);
+            res.redirect('admin/');
+        });
+    }).catch((error) => {
+        req.flash('error_msg', 'Oops, perfil não encontrado! => ' + error);
+        res.redirect('admin/');
+    })
+});
+
+//Editar Perfil
+router.get('/editPerfil', isLogged, (req, res) => {
+    modelUsuario.findOne({ _id: req.user._id }).populate("grupo").lean().then((infoUsuario) => {
+        modelGrupo.find().lean().then((grupos) => {
+            res.render('admin/editPerfil', { data: infoUsuario, grupos: grupos });
+        }).catch((error) => {
+            req.flash('error_msg', 'Oops, não foi possivel carregar as informações! => ' + error);
+            res.render('admin/');
+        });
+    }).catch((error) => {
+        req.flash('error_msg', 'Oops, pagamento não encontrado! => ' + error);
+        res.redirect('/admin/');
+    });
+});
+
+//Update Perfil
+router.post('/updatePerfil', isLogged, (req, res) => {
+    var errors = [];
+    if (!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null) {
+        errors.push({ error: 'Oops, informe o nome!' });
+    }
+    if (!req.body.email || typeof req.body.email == undefined || req.body.email == null) {
+        errors.push({ error: 'Oops, informe o email!' });
+    }
+
+    if (req.body.senha != '') {
+        if (!req.body.senha || typeof req.body.senha == undefined || req.body.senha == null) {
+            errors.push({ error: "Campo Senha é obrigatório!" })
+        } else if (req.body.senha.length < 6) {
+            errors.push({ error: "Tamanho mínimo de 6 caracteres." })
+        }
+
+        if (!req.body.csenha || typeof req.body.csenha == undefined || req.body.csenha == null) {
+            errors.push({ error: "Campo Confirmar Senha é obrigatório!" })
+        } else if (req.body.senha.length < 6) {
+            errors.push({ error: "Tamanho mínimo de 6 caracteres." })
+        }
+        if (req.body.senha != req.body.csenha) {
+            errors.push({ error: "O Campo Senha e Confirmação Senha são diferentes!" })
+        }
+    }
+    if (errors.length > 0) {
+        req.flash('errors_msg', errors);
+        res.redirect('editPerfil/');
+    } else {
+        modelUsuario.findOne({ _id: req.user._id }).then((Usuario) => {
+            Usuario.nome = req.body.nome;
+            Usuario.email = req.body.email;
+
+            if (req.body.senha != '') {
+                bcryptjs.genSalt(10, (error, salt) => {
+                    bcryptjs.hash(req.body.senha.trim(), salt, (error, hash) => {
+                        if (error) {
+                            req.flash("error_msg", "Oops, não foi possivel atualizar senha!");
+                            res.redirect('/admin/editPerfil');
+                        } else {
+                            Usuario.senha = hash;
+                            Usuario.save().then(() => {
+                                req.flash('success_msg', 'Perfil atualizado com sucesso!');
+                                res.redirect('/admin/perfil');
+                            }).catch((error) => {
+                                req.flash('error_msg', 'Oops, não foi possivel atualizar o perfil! => ' + error);
+                                res.redirect('/admin/perfil');
+                            });
+                        }
+                    });
+                });
+            } else {
+                Usuario.save().then(() => {
+                    req.flash('success_msg', 'Perfil atualizado com sucesso!');
+                    res.redirect('/admin/perfil');
+                }).catch((error) => {
+                    req.flash('error_msg', 'Oops, não foi possivel atualizar o perfil! => ' + error);
+                    res.redirect('/admin/perfil');
+                });
+            }
+
+        }).catch((error) => {
+            req.flash('error_msg', 'Oops, não foi possivel atualizar, usuário não encontrado! => ' + error);
+            res.redirect('/admin/usuarios');
+        });
+    }
+});
+
 
 //Exportar o Módulo de Rotas
 module.exports = router;

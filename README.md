@@ -18,5 +18,7 @@ Desenvolvido em Ambiente Docker(Node+MongoDB) utilizando:
 - passport-local
 
 Scritp liberado para implementação e melhorias desde que mantenham-se os créditos!
+---
+By Fernando Andrade
 Email: dev@fdandrade.com.br
 
